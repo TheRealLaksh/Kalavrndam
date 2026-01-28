@@ -59,5 +59,29 @@ export const CONTENT = {
       { id: 3, name: "Mentor Three", role: "Visual Arts" },
       { id: 4, name: "Mentor Four", role: "Design Head" }
     ]
+  },
+  founders: {
+    title: "The Founders",
+    subtitle: "The visionaries behind the collective.",
+    items: [
+      { 
+        id: 1, 
+        name: "Founder One", 
+        role: "Creative Director", 
+        bio: "Visionary artist with a passion for integrating traditional forms with modern digital expression." 
+      },
+      { 
+        id: 2, 
+        name: "Founder Two", 
+        role: "Operations Lead", 
+        bio: "Orchestrating the chaos of creativity into structured, impactful community events." 
+      },
+      { 
+        id: 3, 
+        name: "Founder Three", 
+        role: "Community Manager", 
+        bio: "Building bridges between young artists and established mentors to foster growth." 
+      }
+    ]
   }
 };

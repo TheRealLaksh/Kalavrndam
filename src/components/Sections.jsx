@@ -137,8 +137,46 @@ export const About = () => (
     </div>
   </section>
 );
+// --- 5. Founders ---
+export const Founders = () => (
+  <section id="founders" className="py-32 bg-stone-50 border-t border-ink/5">
+    <div className="container mx-auto px-6">
+      <SectionHeader title={CONTENT.founders.title} subtitle={CONTENT.founders.subtitle} />
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {CONTENT.founders.items.map((founder, idx) => (
+          <motion.div 
+            key={founder.id}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: idx * 0.2 }}
+            whileHover={{ y: -10 }}
+            className="group relative bg-white p-8 border border-ink/10 shadow-sm hover:shadow-2xl transition-all duration-500"
+          >
+            {/* Decorative Corner */}
+            <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            
+            {/* Image Placeholder */}
+            <div className="w-full aspect-square bg-stone-200 mb-6 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
+               {/* Replace with <img /> when you have real photos */}
+               <div className="w-full h-full flex items-center justify-center text-ink/20 text-4xl font-display">
+                 {founder.name.charAt(0)}
+               </div>
+            </div>
 
-// --- 5. Footer (FIXED) ---
+            <h3 className="font-display text-2xl text-ink mb-1">{founder.name}</h3>
+            <p className="text-xs font-bold text-accent uppercase tracking-widest mb-4">{founder.role}</p>
+            <p className="font-body text-ink/70 text-sm leading-relaxed border-l-2 border-ink/10 pl-3">
+              {founder.bio}
+            </p>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+// --- 6. Footer (FIXED) ---
 export const Footer = () => {
   const contactItems = [
     { 

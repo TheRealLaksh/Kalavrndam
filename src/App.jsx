@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
-import { Hero, Gallery, Events, About, Footer } from './components/Sections';
+// Updated import to include Founders
+import { Hero, Gallery, Events, About, Founders, Footer } from './components/Sections';
 import { CONTENT } from './data';
 
 export default function App() {
@@ -45,6 +46,8 @@ export default function App() {
         <Gallery />
         <Events />
         <About />
+        {/* Founders Section Added Here */}
+        <Founders />
       </main>
       <Footer />
     </div>

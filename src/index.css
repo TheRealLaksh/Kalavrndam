@@ -4,8 +4,16 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-canvas text-ink font-body antialiased;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Prevents fixed navbar from covering section titles (approx navbar height) */
+    scroll-padding-top: 100px; 
+  }
+  
+  body {
+    @apply bg-canvas text-ink font-body antialiased;
+  }
 }
 
 /* Custom Scrollbar for artistic feel */
@@ -13,5 +21,5 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-ink/20 rounded-full;
+  @apply bg-ink/20 rounded-full hover:bg-ink/40 transition-colors;
 }

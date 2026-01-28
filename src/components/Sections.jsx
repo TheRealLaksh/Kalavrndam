@@ -138,23 +138,58 @@ export const About = () => (
   </section>
 );
 
-// --- 5. Footer ---
-export const Footer = () => (
-  <footer id="contact" className="bg-canvas pt-24 pb-12 border-t border-ink/5">
-    <div className="container mx-auto px-6 text-center">
-      <h2 className="font-display text-4xl mb-12">Get in Touch</h2>
-      <div className="flex flex-wrap justify-center gap-12 mb-20">
-        {[
-            { icon: Mail, text: CONTENT.brand.contact.email },
-            { icon: Instagram, text: CONTENT.brand.contact.instagram },
-            { icon: MapPin, text: CONTENT.brand.contact.location }
-        ].map((item, idx) => (
-          <div key={idx} className="flex items-center gap-3 opacity-70 hover:opacity-100 transition-opacity">
-            <item.icon className="w-5 h-5" /> <span>{item.text}</span>
-          </div>
-        ))}
+// --- 5. Footer (FIXED) ---
+export const Footer = () => {
+  const contactItems = [
+    { 
+      icon: Mail, 
+      text: CONTENT.brand.contact.email, 
+      href: `mailto:${CONTENT.brand.contact.email}`,
+      label: "Email us"
+    },
+    { 
+      icon: Instagram, 
+      text: CONTENT.brand.contact.instagram, 
+      href: "https://instagram.com", // Replace with actual URL if known
+      target: "_blank",
+      label: "Visit our Instagram"
+    },
+    { 
+      icon: MapPin, 
+      text: CONTENT.brand.contact.location,
+      href: null // Location is static text
+    }
+  ];
+
+  return (
+    <footer id="contact" className="bg-canvas pt-24 pb-12 border-t border-ink/5">
+      <div className="container mx-auto px-6 text-center">
+        <h2 className="font-display text-4xl mb-12">Get in Touch</h2>
+        <div className="flex flex-wrap justify-center gap-12 mb-20">
+          {contactItems.map((item, idx) => {
+            const Wrapper = item.href ? 'a' : 'div';
+            const props = item.href ? { 
+              href: item.href, 
+              target: item.target,
+              rel: item.target === "_blank" ? "noopener noreferrer" : undefined,
+              "aria-label": item.label,
+              className: "flex items-center gap-3 opacity-70 hover:opacity-100 transition-opacity hover:text-accent cursor-pointer"
+            } : {
+              className: "flex items-center gap-3 opacity-70"
+            };
+
+            return (
+              <Wrapper key={idx} {...props}>
+                <item.icon className="w-5 h-5" /> 
+                <span>{item.text}</span>
+              </Wrapper>
+            );
+          })}
+        </div>
+        <div className="text-xs font-bold text-ink/30 uppercase tracking-[0.2em]">
+          &copy; 2026 {CONTENT.brand.name}
+        </div>
       </div>
-      <div className="text-xs font-bold text-ink/30 uppercase tracking-[0.2em]">&copy; 2024 {CONTENT.brand.name}</div>
-    </div>
-  </footer>
-);
+    </footer>
+  );
+};

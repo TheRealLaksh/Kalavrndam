@@ -1,6 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useSpring, useMotionValue } from 'framer-motion';
-import { Hero, Gallery, Events, About, Founders, Footer } from './components/Sections';
+import { 
+  Hero, 
+  Gallery, 
+  Events, 
+  About, 
+  Founders, 
+  Footer 
+} from './components/sections'; // Importing from the new directory
 import { CONTENT } from './data';
 
 export default function App() {
@@ -8,7 +15,7 @@ export default function App() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
-  // --- Custom Cursor Logic ---
+  // Custom Cursor Logic
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   const springConfig = { damping: 25, stiffness: 700 };
@@ -33,16 +40,16 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen bg-canvas text-ink selection:bg-accent selection:text-white">
-      {/* 1. Global Noise Overlay (The Texture) */}
+      {/* Global Noise Overlay */}
       <div className="bg-noise" />
 
-      {/* 2. Artistic Custom Cursor */}
+      {/* Artistic Custom Cursor */}
       <motion.div 
         className="fixed top-0 left-0 w-8 h-8 bg-ink rounded-full pointer-events-none z-[9999] mix-blend-difference"
         style={{ x: cursorXSpring, y: cursorYSpring }}
       />
 
-      {/* 3. Top Progress Bar */}
+      {/* Top Progress Bar */}
       <motion.div 
         className="fixed top-0 left-0 right-0 h-1 bg-accent origin-left z-[100]" 
         style={{ scaleX }} 
@@ -59,7 +66,7 @@ export default function App() {
           </a>
           
           <ul className="hidden md:flex gap-10">
-            {CONTENT.nav.map((link, i) => (
+            {CONTENT.nav.map((link) => (
               <li key={link.label}>
                 <a 
                   href={link.href} 

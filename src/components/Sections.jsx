@@ -1,242 +1,301 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, Instagram, Mail, MapPin, Sparkles } from 'lucide-react';
-import { CONTENT } from '../data';
+import React, { useRef } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import {
+  ArrowRight,
+  Instagram,
+  Mail,
+  MapPin,
+  Sparkles,
+} from "lucide-react";
+import { CONTENT } from "../data";
 
-// --- Animation Config ---
+/* ---------------- SHARED ---------------- */
+
 const fadeUp = {
   hidden: { opacity: 0, y: 60 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: "easeOut" },
+  },
 };
 
-const SectionHeader = ({ title, subtitle, light = false }) => (
-  <motion.div 
-    initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-    className="mb-16 max-w-2xl"
+const SectionHeader = ({ title, subtitle, light = false, align = "left" }) => (
+  <motion.div
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true }}
+    variants={fadeUp}
+    className={`mb-24 max-w-3xl ${
+      align === "center" ? "mx-auto text-center" : ""
+    }`}
   >
-    <h2 className={`font-display text-5xl md:text-6xl mb-4 ${light ? 'text-white' : 'text-ink'}`}>{title}</h2>
-    <div className="h-1 w-24 bg-accent mb-6" />
-    <p className={`text-lg ${light ? 'text-white/60' : 'text-ink/60'}`}>{subtitle}</p>
+    <h2
+      className={`font-display text-7xl md:text-8xl mb-6 ${
+        light ? "text-white" : "text-ink"
+      }`}
+    >
+      {title}
+    </h2>
+    <div
+      className={`h-1 w-24 bg-accent mb-6 ${
+        align === "center" ? "mx-auto" : ""
+      }`}
+    />
+    <p
+      className={`text-lg uppercase tracking-widest ${
+        light ? "text-white/60" : "text-ink/60"
+      }`}
+    >
+      {subtitle}
+    </p>
   </motion.div>
 );
 
-// --- 1. Hero ---
-export const Hero = () => (
-  <section className="relative h-screen flex flex-col justify-center items-center overflow-hidden bg-canvas">
-    <div className="absolute inset-0 opacity-10 pointer-events-none">
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-ink rounded-full blur-[120px]" />
-    </div>
-    <div className="container mx-auto px-6 z-10 text-center">
-      <motion.h1 
-        initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}
-        className="font-display text-7xl md:text-9xl font-bold text-ink mb-6 tracking-tight"
-      >
-        {CONTENT.brand.name}
-      </motion.h1>
-      <motion.p 
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5, duration: 1 }}
-        className="font-body text-xl md:text-2xl font-light text-ink/70 mb-12 italic"
-      >
-        {CONTENT.hero.subtitle}
-      </motion.p>
-      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.8 }}>
-        <a href="#gallery" className="group relative inline-flex items-center gap-3 px-8 py-4 bg-ink text-canvas rounded-full overflow-hidden transition-all hover:pr-10">
-          <span className="relative z-10 font-medium tracking-wide">{CONTENT.hero.cta}</span>
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-        </a>
-      </motion.div>
-    </div>
-  </section>
-);
+/* ---------------- HERO ---------------- */
 
-// --- 2. Gallery ---
-export const Gallery = () => (
-  <section id="gallery" className="py-32 bg-white">
-    <div className="container mx-auto px-6">
-      <SectionHeader title={CONTENT.gallery.title} subtitle={CONTENT.gallery.subtitle} />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {CONTENT.gallery.items.map((item, idx) => (
-          <motion.div 
-            key={item.id}
-            initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ delay: idx * 0.1 }}
-            className="group cursor-pointer"
-          >
-            <div className="relative overflow-hidden aspect-[4/5] bg-stone-100 mb-4 rounded-sm">
-              {/* Performance: Added lazy loading and async decoding for off-screen images */}
-              <img 
-                src={item.img} 
-                alt={item.title} 
-                loading="lazy"
-                decoding="async"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 saturate-0 group-hover:saturate-100" 
-              />
-            </div>
-            <div className="flex justify-between items-end border-b border-ink/10 pb-2">
-              <h3 className="font-display text-xl text-ink">{item.title}</h3>
-              <span className="font-body text-xs font-bold text-accent uppercase tracking-widest">{item.artist}</span>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-// --- 3. Events ---
-export const Events = () => (
-  <section id="events" className="py-32 bg-stone-50">
-    <div className="container mx-auto px-6">
-      <SectionHeader title={CONTENT.events.title} subtitle={CONTENT.events.subtitle} />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {CONTENT.events.items.map((event, idx) => (
-          <motion.div 
-            key={event.id}
-            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ delay: idx * 0.1 }}
-            whileHover={{ y: -8 }}
-            className={`p-8 bg-white border-l-4 transition-all duration-300 shadow-sm hover:shadow-xl ${event.upcoming ? 'border-accent' : 'border-ink/20'}`}
-          >
-            <div className="flex justify-between items-start mb-6">
-              <span className="text-xs font-bold text-ink/40 uppercase tracking-widest">{event.audience}</span>
-              {event.upcoming && <Sparkles className="w-5 h-5 text-accent animate-pulse" />}
-            </div>
-            <h3 className="font-display text-2xl text-ink mb-3 leading-tight">{event.title}</h3>
-            <p className="font-body text-ink/70 text-sm leading-relaxed">{event.desc}</p>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-// --- 4. About & Mentors ---
-export const About = () => (
-  <section id="about" className="py-32 bg-ink text-canvas relative">
-    <div className="container mx-auto px-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-          <h2 className="font-display text-5xl mb-8 text-white">{CONTENT.about.title}</h2>
-          <p className="text-xl font-light leading-relaxed opacity-80 mb-12 border-l-2 border-accent pl-6">{CONTENT.about.text}</p>
-          <div className="grid grid-cols-3 gap-8 mb-12">
-            {CONTENT.about.stats.map((stat, idx) => (
-              <div key={idx}>
-                <span className="block font-display text-4xl text-accent mb-1">{stat.number}</span>
-                <span className="text-xs uppercase tracking-widest opacity-60">{stat.label}</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-        <div id="mentors" className="bg-white/5 p-10 rounded-2xl backdrop-blur-sm border border-white/10">
-          <h3 className="font-display text-3xl mb-8 text-white">{CONTENT.mentors.title}</h3>
-          <div className="grid grid-cols-2 gap-6">
-            {CONTENT.mentors.items.map((mentor) => (
-              <div key={mentor.id} className="text-center p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-colors">
-                <div className="w-16 h-16 mx-auto bg-stone-200 rounded-full mb-3 opacity-80" />
-                <h4 className="font-display text-lg text-white">{mentor.name}</h4>
-                <p className="text-xs text-accent uppercase tracking-widest">{mentor.role}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
-// --- 5. Founders ---
-export const Founders = () => (
-  <section id="founders" className="py-32 bg-stone-50 border-t border-ink/5">
-    <div className="container mx-auto px-6">
-      <SectionHeader title={CONTENT.founders.title} subtitle={CONTENT.founders.subtitle} />
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {CONTENT.founders.items.map((founder, idx) => (
-          <motion.div 
-            key={founder.id}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: idx * 0.2 }}
-            whileHover={{ y: -10 }}
-            className="group relative bg-white p-8 border border-ink/10 shadow-sm hover:shadow-2xl transition-all duration-500"
-          >
-            {/* Decorative Corner */}
-            <div className="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            
-            {/* Image Placeholder */}
-            <div className="w-full aspect-square bg-stone-200 mb-6 overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-500">
-               {/* Replace with <img /> when you have real photos */}
-               <div className="w-full h-full flex items-center justify-center text-ink/20 text-4xl font-display">
-                 {founder.name.charAt(0)}
-               </div>
-            </div>
-
-            <h3 className="font-display text-2xl text-ink mb-1">{founder.name}</h3>
-            <p className="text-xs font-bold text-accent uppercase tracking-widest mb-4">{founder.role}</p>
-            <p className="font-body text-ink/70 text-sm leading-relaxed border-l-2 border-ink/10 pl-3">
-              {founder.bio}
-            </p>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
-
-// --- 6. Footer ---
-export const Footer = () => {
-  const contactItems = [
-    { 
-      icon: Mail, 
-      text: CONTENT.brand.contact.email, 
-      href: `mailto:${CONTENT.brand.contact.email}`,
-      label: "Email us"
-    },
-    { 
-      icon: Instagram, 
-      text: CONTENT.brand.contact.instagram, 
-      href: "https://instagram.com", // Replace with actual URL if known
-      target: "_blank",
-      label: "Visit our Instagram"
-    },
-    { 
-      icon: MapPin, 
-      text: CONTENT.brand.contact.location,
-      href: null // Location is static text
-    }
-  ];
+export const Hero = () => {
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 500], [0, 200]);
+  const y2 = useTransform(scrollY, [0, 500], [0, -200]);
+  const rotate = useTransform(scrollY, [0, 500], [0, 5]);
 
   return (
-    <footer id="contact" className="bg-canvas pt-24 pb-12 border-t border-ink/5">
-      <div className="container mx-auto px-6 text-center">
-        <h2 className="font-display text-4xl mb-12">Get in Touch</h2>
-        <div className="flex flex-wrap justify-center gap-12 mb-20">
-          {contactItems.map((item, idx) => {
-            const Wrapper = item.href ? 'a' : 'div';
-            const props = item.href ? { 
-              href: item.href, 
-              target: item.target,
-              rel: item.target === "_blank" ? "noopener noreferrer" : undefined,
-              "aria-label": item.label,
-              className: "flex items-center gap-3 opacity-70 hover:opacity-100 transition-opacity hover:text-accent cursor-pointer"
-            } : {
-              className: "flex items-center gap-3 opacity-70"
-            };
-
-            return (
-              <Wrapper key={idx} {...props}>
-                <item.icon className="w-5 h-5" /> 
-                <span>{item.text}</span>
-              </Wrapper>
-            );
-          })}
-        </div>
-        <div className="text-xs font-bold text-ink/30 uppercase tracking-[0.2em]">
-          &copy; 2026 {CONTENT.brand.name}
-        </div>
+    <section className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden bg-canvas">
+      <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
+        <div className="w-[90vw] h-[90vw] border-[100px] border-ink rounded-full" />
       </div>
-    </footer>
+
+      <div className="relative z-10 text-center">
+        <motion.div style={{ y: y2, rotate }}>
+          <h1 className="font-display text-[18vw] leading-[0.8] text-ink mix-blend-difference">
+            KALA
+          </h1>
+        </motion.div>
+
+        <motion.div style={{ y: y1 }} className="-mt-[4vw]">
+          <h1 className="font-display text-[18vw] leading-[0.8] text-transparent bg-clip-text bg-gradient-to-b from-ink to-transparent">
+            VRINDAM
+          </h1>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          className="mt-16 flex flex-col items-center gap-4"
+        >
+          <span className="text-xs font-bold uppercase tracking-[0.4em] text-accent">
+            Scroll to Explore
+          </span>
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="w-px h-12 bg-ink/20"
+          />
+        </motion.div>
+      </div>
+    </section>
   );
 };
+
+/* ---------------- GALLERY ---------------- */
+
+export const Gallery = () => {
+  const targetRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: targetRef });
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
+
+  return (
+    <section ref={targetRef} className="relative h-[400vh] bg-ink">
+      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
+        <motion.div style={{ x }} className="flex gap-20 px-20">
+          <div className="flex-shrink-0 w-[40vw]">
+            <h2 className="font-display text-8xl text-white mb-6">
+              The <span className="italic text-accent">Gallery</span>
+            </h2>
+            <p className="text-white/60 text-xl">
+              {CONTENT.gallery.subtitle}
+            </p>
+            <ArrowRight className="text-white mt-12 w-12 h-12" />
+          </div>
+
+          {CONTENT.gallery.items.map((item, idx) => (
+            <div
+              key={item.id}
+              className="relative flex-shrink-0 w-[60vh] h-[70vh] bg-stone-900 overflow-hidden"
+            >
+              <img
+                src={item.img}
+                alt={item.title}
+                className="w-full h-full object-cover opacity-70"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 p-8 flex flex-col justify-end">
+                <span className="text-accent text-xs uppercase tracking-widest mb-2">
+                  0{idx + 1} — {item.artist}
+                </span>
+                <h3 className="font-display text-4xl text-white">
+                  {item.title}
+                </h3>
+              </div>
+            </div>
+          ))}
+
+          <div className="flex-shrink-0 w-[40vw] flex items-center justify-center">
+            <span className="font-display text-9xl text-white/5">FIN</span>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+/* ---------------- EVENTS (FROM 2nd CODE) ---------------- */
+
+export const Events = () => (
+  <section id="events" className="py-40 bg-stone-50">
+    <div className="container mx-auto px-6">
+      <SectionHeader
+        title={CONTENT.events.title}
+        subtitle={CONTENT.events.subtitle}
+      />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        {CONTENT.events.items.map((event, idx) => (
+          <motion.div
+            key={event.id}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: idx * 0.1 }}
+            whileHover={{ y: -12 }}
+            className="relative bg-white p-10 shadow-xl transition-all"
+          >
+            <div className="absolute left-0 top-0 w-1 h-full bg-accent scale-y-0 group-hover:scale-y-100 origin-top transition-transform" />
+
+            <div className="flex justify-between mb-6">
+              <span className="text-xs font-bold uppercase tracking-widest text-ink/50">
+                {event.audience}
+              </span>
+              {event.upcoming && (
+                <Sparkles className="text-accent animate-pulse" />
+              )}
+            </div>
+
+            <h3 className="font-display text-3xl mb-4">
+              {event.title}
+            </h3>
+            <p className="text-ink/60 text-sm">{event.desc}</p>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+/* ---------------- ABOUT ---------------- */
+
+export const About = () => (
+  <section className="py-40 bg-ink text-canvas">
+    <div className="container mx-auto px-6">
+      <div className="flex flex-col lg:flex-row gap-20">
+        <div className="lg:w-1/2">
+          <h2 className="font-display text-8xl mb-12 text-white">
+            Our <span className="text-accent">Vision</span>
+          </h2>
+
+          <div className="grid grid-cols-2 gap-8">
+            {CONTENT.about.stats.map((stat, idx) => (
+              <div key={idx}>
+                <span className="font-display text-5xl text-accent">
+                  {stat.number}
+                </span>
+                <span className="text-sm uppercase tracking-widest text-white/60">
+                  {stat.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="lg:w-1/2 text-xl font-light text-white/80">
+          <p className="mb-10">{CONTENT.about.text}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+/* ---------------- FOUNDERS ---------------- */
+
+export const Founders = () => (
+  <section className="py-40 bg-stone-100">
+    <div className="container mx-auto px-6 text-center mb-20">
+      <SectionHeader
+        title="THE MINDS"
+        subtitle="Orchestrators"
+        align="center"
+      />
+    </div>
+
+    <div className="flex justify-center gap-10 flex-wrap">
+      {CONTENT.founders.items.map((founder, idx) => (
+        <motion.div
+          key={founder.id}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: idx * 0.1 }}
+          className="w-80 bg-white p-6 shadow-xl"
+        >
+          <div className="aspect-[4/5] bg-stone-200 mb-6 flex items-center justify-center text-5xl text-ink/30">
+            {founder.name.charAt(0)}
+          </div>
+          <h3 className="font-display text-2xl">{founder.name}</h3>
+          <p className="text-xs uppercase tracking-widest text-accent">
+            {founder.role}
+          </p>
+        </motion.div>
+      ))}
+    </div>
+  </section>
+);
+
+/* ---------------- FOOTER (FROM 2nd CODE) ---------------- */
+
+export const Footer = () => (
+  <footer id="contact" className="bg-canvas pt-32 pb-12 border-t">
+    <div className="container mx-auto px-6 text-center">
+      <motion.h2
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        className="font-display text-[15vw] leading-[0.8] text-ink/5"
+      >
+        CONNECT
+      </motion.h2>
+
+      <div className="relative -mt-20 bg-canvas/90 backdrop-blur py-16">
+        <div className="flex justify-center gap-16 mb-16">
+          <a href={`mailto:${CONTENT.brand.contact.email}`}>
+            <Mail />
+          </a>
+          <a href="#">
+            <Instagram />
+          </a>
+          <div className="opacity-50">
+            <MapPin />
+          </div>
+        </div>
+
+        <div className="flex justify-between max-w-4xl mx-auto text-xs uppercase tracking-widest text-ink/40">
+          <span>© 2026 {CONTENT.brand.name}</span>
+          <span>Students of CIRS</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+);

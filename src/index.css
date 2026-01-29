@@ -7,19 +7,50 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    /* Prevents fixed navbar from covering section titles (approx navbar height) */
-    scroll-padding-top: 100px; 
+    scroll-padding-top: 100px;
   }
   
   body {
-    @apply bg-canvas text-ink font-body antialiased;
+    /* Hide default cursor to use our custom artistic one */
+    cursor: none; 
+    @apply bg-canvas text-ink font-body antialiased overflow-x-hidden;
+  }
+  
+  /* Ensure interactive elements also don't show the default cursor */
+  a, button, input, textarea {
+    cursor: none;
   }
 }
 
-/* Custom Scrollbar for artistic feel */
+@layer utilities {
+  /* Artistic Grain Overlay */
+  .bg-noise {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  /* Text Reveal Utilities */
+  .clip-text-image {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Custom Scrollbar - Thinner & darker */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-ink/20 rounded-full hover:bg-ink/40 transition-colors;
+  @apply bg-ink/30 rounded-full;
 }

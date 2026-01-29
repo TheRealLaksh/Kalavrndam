@@ -64,7 +64,14 @@ export const Gallery = () => (
             className="group cursor-pointer"
           >
             <div className="relative overflow-hidden aspect-[4/5] bg-stone-100 mb-4 rounded-sm">
-              <img src={item.img} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 saturate-0 group-hover:saturate-100" />
+              {/* Performance: Added lazy loading and async decoding for off-screen images */}
+              <img 
+                src={item.img} 
+                alt={item.title} 
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 saturate-0 group-hover:saturate-100" 
+              />
             </div>
             <div className="flex justify-between items-end border-b border-ink/10 pb-2">
               <h3 className="font-display text-xl text-ink">{item.title}</h3>
@@ -137,6 +144,7 @@ export const About = () => (
     </div>
   </section>
 );
+
 // --- 5. Founders ---
 export const Founders = () => (
   <section id="founders" className="py-32 bg-stone-50 border-t border-ink/5">
@@ -176,7 +184,8 @@ export const Founders = () => (
     </div>
   </section>
 );
-// --- 6. Footer (FIXED) ---
+
+// --- 6. Footer ---
 export const Footer = () => {
   const contactItems = [
     { 
